@@ -39,10 +39,14 @@ xdebug_path="zend_extension=\"$(find / -name 'xdebug.so' -type f 2>/dev/null)\""
 sed -i.bak "/\[xdebug\]/a $xdebug_path" /vagrant/php.ini-fpm
 mv /etc/php/7.2/fpm/php.ini /etc/php/7.2/fpm/php.ini-def
 cp /vagrant/php.ini-fpm /etc/php/7.2/fpm/php.ini
+rm /vagrant/php.ini-fpm
+mv /vagrant/php.ini-fpm.bak /vagrant/php.ini-fpm
 
 sed -i.bak "/\[xdebug\]/a $xdebug_path" /vagrant/php.ini-cli
 mv /etc/php/7.2/cli/php.ini /etc/php/7.2/cli/php.ini-def
 cp /vagrant/php.ini-cli /etc/php/7.2/cli/php.ini
+rm /vagrant/php.ini-cli
+mv /vagrant/php.ini-cli.bak /vagrant/php.ini-cli
 
 systemctl restart php7.2-fpm
 
@@ -110,4 +114,31 @@ php composer-setup.php --quiet
 RESULT=$?
 mv composer.phar /usr/local/bin/composer
 rm composer-setup.php
+
+## install report
+
+echo ""
+echo "###### INSTALL REPORT ######"
+echo ""
+php -v
+echo ""
+echo ""
+nginx -v
+echo ""
+echo ""
+psql --version
+echo ""
+echo ""
+composer --version
+echo ""
+echo ""
+docker --version
+echo ""
+echo ""
+uname -api
+echo ""
+echo ""
+echo "######      ######"
+
+
 exit $RESULT
